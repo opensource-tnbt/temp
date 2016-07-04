@@ -33,12 +33,7 @@ def get_stc_common_settings():
     """
     Return the common Settings
     """
-    args = [settings.getValue("TRAFFICGEN_STC_PYTHON2_PATH"),
-            os.path.join(
-                settings.getValue("TRAFFICGEN_STC_TESTCENTER_PATH"),
-                settings.getValue(
-                    "TRAFFICGEN_STC_RFC2544_TPUT_TEST_FILE_NAME")),
-            "--lab_server_addr",
+    args = ["--lab_server_addr",
             settings.getValue("TRAFFICGEN_STC_LAB_SERVER_ADDR"),
             "--license_server_addr",
             settings.getValue("TRAFFICGEN_STC_LICENSE_SERVER_ADDR"),
@@ -59,13 +54,7 @@ def get_stc_common_settings():
             "--results_dir",
             settings.getValue("TRAFFICGEN_STC_RESULTS_DIR"),
             "--csv_results_file_prefix",
-            settings.getValue("TRAFFICGEN_STC_CSV_RESULTS_FILE_PREFIX"),
-            "--num_trials",
-            settings.getValue("TRAFFICGEN_STC_NUMBER_OF_TRIALS"),
-            "--trial_duration_sec",
-            settings.getValue("TRAFFICGEN_STC_TRIAL_DURATION_SEC"),
-            "--traffic_pattern",
-            settings.getValue("TRAFFICGEN_STC_TRAFFIC_PATTERN")]
+            settings.getValue("TRAFFICGEN_STC_CSV_RESULTS_FILE_PREFIX")]
     return args
 
 
@@ -73,7 +62,14 @@ def get_rfc2544_common_settings():
     """
     Retrun Generic RFC 2544 settings
     """
-    args = ["--search_mode",
+    args = [settings.getValue("TRAFFICGEN_STC_PYTHON2_PATH"),
+            os.path.join(
+                settings.getValue("TRAFFICGEN_STC_TESTCENTER_PATH"),
+                settings.getValue(
+                    "TRAFFICGEN_STC_RFC2544_TPUT_TEST_FILE_NAME")),
+            "--metric",
+            settings.getValue("TRAFFICGEN_STC_RFC2544_METRIC"),
+            "--search_mode",
             settings.getValue("TRAFFICGEN_STC_SEARCH_MODE"),
             "--learning_mode",
             settings.getValue("TRAFFICGEN_STC_LEARNING_MODE"),
@@ -96,8 +92,13 @@ def get_rfc2544_common_settings():
             "--west_intf_addr",
             settings.getValue("TRAFFICGEN_STC_WEST_INTF_ADDR"),
             "--west_intf_gateway_addr",
-            settings.getValue("TRAFFICGEN_STC_WEST_INTF_GATEWAY_ADDR")]
-
+            settings.getValue("TRAFFICGEN_STC_WEST_INTF_GATEWAY_ADDR"),
+            "--num_trials",
+            settings.getValue("TRAFFICGEN_STC_NUMBER_OF_TRIALS"),
+            "--trial_duration_sec",
+            settings.getValue("TRAFFICGEN_STC_TRIAL_DURATION_SEC"),
+            "--traffic_pattern",
+            settings.getValue("TRAFFICGEN_STC_TRAFFIC_PATTERN")]
     return args
 
 
@@ -110,9 +111,6 @@ def get_rfc2544_custom_settings(framesize, custom_tr):
             "--traffic_custom",
             str(custom_tr)]
     return args
-
-
-
 
 
 class TestCenter(trafficgen.ITrafficGenerator):
@@ -192,7 +190,7 @@ class TestCenter(trafficgen.ITrafficGenerator):
         stc_common_args = get_stc_common_settings()
         rfc2544_common_args = get_rfc2544_common_settings()
         rfc2544_custom_args = get_rfc2544_custom_settings(framesize,
-                                                               custom)
+                                                          custom)
         args = stc_common_args + rfc2544_common_args + rfc2544_custom_args
 
         if settings.getValue("TRAFFICGEN_STC_VERBOSE") is "True":
@@ -286,5 +284,5 @@ if __name__ == '__main__':
         },
     }
     with TestCenter() as dev:
-        print dev.send_rfc2544_throughput(traffic=TRAFFIC)
-        print dev.send_rfc2544_backtoback(traffic=TRAFFIC)
+        print (dev.send_rfc2544_throughput(traffic=TRAFFIC))
+        print (dev.send_rfc2544_backtoback(traffic=TRAFFIC))
