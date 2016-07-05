@@ -32,6 +32,7 @@ from tools.pkt_gen import trafficgen
 def get_stc_common_settings():
     """
     Return the common Settings
+    These settings would apply to almost all the tests.
     """
     args = ["--lab_server_addr",
             settings.getValue("TRAFFICGEN_STC_LAB_SERVER_ADDR"),
@@ -60,7 +61,8 @@ def get_stc_common_settings():
 
 def get_rfc2544_common_settings():
     """
-    Retrun Generic RFC 2544 settings
+    Retrun Generic RFC 2544 settings.
+    These settings apply to all the 2544 tests
     """
     args = [settings.getValue("TRAFFICGEN_STC_PYTHON2_PATH"),
             os.path.join(
@@ -207,8 +209,7 @@ class TestCenter(trafficgen.ITrafficGenerator):
         if verbose:
             self._logger.info("file: %s", filec)
 
-        result = self.get_rfc2544_results(filec)
-        return result
+        return self.get_rfc2544_results(filec)
 
     def send_rfc2544_throughput(self, traffic=None, trials=3, duration=20,
                                 lossrate=0.0):
@@ -240,8 +241,7 @@ class TestCenter(trafficgen.ITrafficGenerator):
         if verbose:
             self._logger.info("file: %s", filec)
 
-        result = self.get_rfc2544_results(filec)
-        return result
+        return self.get_rfc2544_results(filec)
 
     def send_rfc2544_back2back(self, traffic=None, trials=1, duration=20,
                                lossrate=0.0):
@@ -272,8 +272,7 @@ class TestCenter(trafficgen.ITrafficGenerator):
         if verbose:
             self._logger.debug("file: %s", filecs)
 
-        result = self.get_rfc2544_results(filecs)
-        return result
+        return self.get_rfc2544_results(filecs)
 
 if __name__ == '__main__':
     TRAFFIC = {
@@ -284,5 +283,5 @@ if __name__ == '__main__':
         },
     }
     with TestCenter() as dev:
-        print (dev.send_rfc2544_throughput(traffic=TRAFFIC))
-        print (dev.send_rfc2544_backtoback(traffic=TRAFFIC))
+        print(dev.send_rfc2544_throughput(traffic=TRAFFIC))
+        print(dev.send_rfc2544_backtoback(traffic=TRAFFIC))
